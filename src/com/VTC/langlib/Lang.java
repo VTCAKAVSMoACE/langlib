@@ -1,7 +1,6 @@
 package com.VTC.langlib;
 
-import java.io.File;
-import java.util.List;
+import java.util.ArrayList;
 
 import com.VTC.langlib.data.DataHandler;
 import com.VTC.langlib.data.LanguageDetail;
@@ -15,13 +14,13 @@ public abstract class Lang implements Instruction {
 
 	private DataHandler dataHandler;
 
-	private List<Setting> settings;
+	private ArrayList<Setting> settings;
 
 	private ParseHandler parseHandler;
 
-	private List<Instruction> instructions;
+	private ArrayList<Instruction> instructions;
 
-	public Lang(LanguageDetail langDetails, DataHandler dataHandler, ParseHandler parseHandler, List<String> args) {
+	public Lang(LanguageDetail langDetails, DataHandler dataHandler, ParseHandler parseHandler, ArrayList<String> args) {
 
 		this.setCurrentLanguageDetail(langDetails);
 		this.setCurrentDataHandler(dataHandler);
@@ -34,11 +33,11 @@ public abstract class Lang implements Instruction {
 		configureInput(args);
 	}
 
-	private void configureInput(List<String> args) {
+	private void configureInput(ArrayList<String> args) {
 		dataHandler.handleInput(args);
 	}
 
-	private void configureArguments(List<String> args) {
+	private void configureArguments(ArrayList<String> args) {
 		String currentFlag = null;
 		for (int currentFlagIndex = 0; currentFlagIndex < args.size(); currentFlagIndex++) {
 			currentFlag = args.get(currentFlagIndex);
@@ -55,8 +54,7 @@ public abstract class Lang implements Instruction {
 	}
 
 	private void configureInstructions(String filename) {
-		File fileToParse = new File(filename);
-		this.setCurrentInstructions(parseHandler.getProgramInstructions(fileToParse));
+		this.setCurrentInstructions(parseHandler.getProgramInstructions(filename));
 	}
 
 	/**
@@ -113,7 +111,7 @@ public abstract class Lang implements Instruction {
 	/**
 	 * @return the settings
 	 */
-	public final List<Setting> getCurrentSettings() {
+	public final ArrayList<Setting> getCurrentSettings() {
 		return settings;
 	}
 
@@ -121,7 +119,7 @@ public abstract class Lang implements Instruction {
 	 * @param settings
 	 *            the settings to set
 	 */
-	public final void setCurrentSettings(List<Setting> settings) {
+	public final void setCurrentSettings(ArrayList<Setting> settings) {
 		this.settings = settings;
 	}
 
@@ -141,7 +139,7 @@ public abstract class Lang implements Instruction {
 	/**
 	 * @return the instructions
 	 */
-	public final List<Instruction> getCurrentInstructions() {
+	public final ArrayList<Instruction> getCurrentInstructions() {
 		return instructions;
 	}
 
@@ -149,12 +147,12 @@ public abstract class Lang implements Instruction {
 	 * @param instructions
 	 *            the instructions to set
 	 */
-	public final void setCurrentInstructions(List<Instruction> instructions) {
+	public final void setCurrentInstructions(ArrayList<Instruction> instructions) {
 		this.instructions = instructions;
 	}
 
 	public final void modifyInstruction(Instruction instruction, int index) {
 		this.instructions.set(index, instruction);
 	}
-
+	
 }

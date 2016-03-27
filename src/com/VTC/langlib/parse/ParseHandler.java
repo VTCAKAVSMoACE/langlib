@@ -1,7 +1,6 @@
 package com.VTC.langlib.parse;
 
-import java.io.File;
-import java.util.List;
+import java.util.ArrayList;
 
 import com.VTC.langlib.structure.Instruction;
 
@@ -37,6 +36,6 @@ public interface ParseHandler {
 	 * @param file The file which is assumed to contain the program instructions.
 	 * @return instructions
 	 */
-	public List<Instruction> getProgramInstructions(File file);
+	public ArrayList<Instruction> getProgramInstructions(String filename);
 	
 }
