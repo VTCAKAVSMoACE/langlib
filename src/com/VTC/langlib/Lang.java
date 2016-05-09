@@ -4,27 +4,62 @@ import java.util.ArrayList;
 
 import com.VTC.langlib.data.DataHandler;
 import com.VTC.langlib.data.LanguageDetail;
-import com.VTC.langlib.data.Setting;
 import com.VTC.langlib.parse.ParseHandler;
 import com.VTC.langlib.structure.Instruction;
 
+/**
+ * 
+ * Lang class, providing the framework for the main instantiable class of the
+ * new language. Mainly here to provide a superclass which will store and return
+ * all of the necessary values for the language to be able to interact with
+ * itself (and customizable usage).
+ * 
+ * For the sake of being meta-language capable, Lang implements Instruction to
+ * allow it to be recognized as a command.
+ * 
+ * @author vtcakavsmoace
+ *
+ */
 public abstract class Lang implements Instruction {
 
+	/**
+	 * The language detailer for this language instance. May be called with
+	 * getCurrentLanguageDetail, but information intended to be output may be
+	 * relayed through reportLanguageDetails.
+	 */
 	private LanguageDetail langDetails;
 
+	/**
+	 * The data handler for this language instance. It is only here in this
+	 * class for the sake of the handleInput method.
+	 */
 	private DataHandler dataHandler;
 
-	private ArrayList<Setting> settings;
-
+	/**
+	 * 
+	 */
 	private ParseHandler parseHandler;
 
-	private ArrayList<Instruction> instructions;
+	/**
+	 * 
+	 */
+	private ArrayList<? extends Instruction> instructions;
 
-	public Lang(LanguageDetail langDetails, DataHandler dataHandler, ParseHandler parseHandler, ArrayList<String> args) {
+	/**
+	 * @param langDetails
+	 * @param dataHandler
+	 * @param parseHandler
+	 * @param args
+	 * @throws Exception
+	 */
+	public Lang(LanguageDetail langDetails, DataHandler dataHandler, ParseHandler parseHandler, ArrayList<String> args)
+			throws Exception {
 
 		this.setCurrentLanguageDetail(langDetails);
 		this.setCurrentDataHandler(dataHandler);
 		this.setCurrentParseHandler(parseHandler);
+
+		configureSettings();
 
 		configureArguments(args);
 
@@ -33,10 +68,17 @@ public abstract class Lang implements Instruction {
 		configureInput(args);
 	}
 
+	/**
+	 * @param args
+	 */
 	private void configureInput(ArrayList<String> args) {
 		dataHandler.handleInput(args);
 	}
 
+	/**
+	 * @param args
+	 * @throws InvalidSettingChangeException
+	 */
 	private void configureArguments(ArrayList<String> args) {
 		String currentFlag = null;
 		for (int currentFlagIndex = 0; currentFlagIndex < args.size(); currentFlagIndex++) {
@@ -48,11 +90,18 @@ public abstract class Lang implements Instruction {
 					parameters[currentParameter] = args.remove(currentFlagIndex + 1);
 				}
 				parseHandler.getInstructionsGivenFlag(args.remove(currentFlagIndex)).execute(parameters);
-				;
 			}
 		}
 	}
 
+	/**
+	 * @throws InvalidSettingChangeException
+	 */
+	public abstract void configureSettings();
+
+	/**
+	 * @param filename
+	 */
 	private void configureInstructions(String filename) {
 		this.setCurrentInstructions(parseHandler.getProgramInstructions(filename));
 	}
@@ -72,6 +121,9 @@ public abstract class Lang implements Instruction {
 		this.langDetails = langDetails;
 	}
 
+	/**
+	 * 
+	 */
 	public final void reportLanguageDetails() {
 		System.out.println(langDetails.getName());
 		System.out.println(langDetails.getVersion());
@@ -109,50 +161,18 @@ public abstract class Lang implements Instruction {
 	}
 
 	/**
-	 * @return the settings
-	 */
-	public final ArrayList<Setting> getCurrentSettings() {
-		return settings;
-	}
-
-	/**
-	 * @param settings
-	 *            the settings to set
-	 */
-	public final void setCurrentSettings(ArrayList<Setting> settings) {
-		this.settings = settings;
-	}
-
-	/**
-	 * @param settings
-	 *            the settings to set
-	 */
-	public final void modifySetting(Setting setting) {
-		int toReplace = settings.indexOf(setting.getReference());
-		if (toReplace == -1) {
-			settings.add(setting);
-			return;
-		}
-		settings.set(toReplace, setting);
-	}
-
-	/**
 	 * @return the instructions
 	 */
-	public final ArrayList<Instruction> getCurrentInstructions() {
+	public final ArrayList<? extends Instruction> getCurrentInstructions() {
 		return instructions;
 	}
 
 	/**
-	 * @param instructions
+	 * @param arrayList
 	 *            the instructions to set
 	 */
-	public final void setCurrentInstructions(ArrayList<Instruction> instructions) {
-		this.instructions = instructions;
+	public final void setCurrentInstructions(ArrayList<? extends Instruction> arrayList) {
+		this.instructions = arrayList;
 	}
 
-	public final void modifyInstruction(Instruction instruction, int index) {
-		this.instructions.set(index, instruction);
-	}
-	
 }

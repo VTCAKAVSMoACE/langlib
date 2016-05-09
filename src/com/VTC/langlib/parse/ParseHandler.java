@@ -28,7 +28,7 @@ public interface ParseHandler {
 	 * @param flag
 	 * @param parameters
 	 */
-	public FlagOperation getInstructionsGivenFlag(String flag);
+	public Flag getInstructionsGivenFlag(String flag);
 	
 	/**
 	 * Given the passed file, parse the file into a list of instructions.
@@ -36,6 +36,6 @@ public interface ParseHandler {
 	 * @param file The file which is assumed to contain the program instructions.
 	 * @return instructions
 	 */
-	public ArrayList<Instruction> getProgramInstructions(String filename);
+	public ArrayList<? extends Instruction> getProgramInstructions(String filename);
 	
 }

@@ -1,6 +1,5 @@
 package com.VTC.HQ9;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.ArrayList;
 
@@ -13,12 +12,12 @@ public class HQ9 extends com.VTC.langlib.Lang {
 	
 	private static HQ9 currentInstance;
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		currentInstance = new HQ9(new LanguageDetail(), new DataHandler(), new ParseHandler(), new ArrayList<String>(Arrays.asList(args)));
 		currentInstance.execute();
 	}
 	
-	public HQ9(LanguageDetail langDetails, DataHandler dataHandler, ParseHandler parseHandler, ArrayList<String> args) {
+	public HQ9(LanguageDetail langDetails, DataHandler dataHandler, ParseHandler parseHandler, ArrayList<String> args) throws Exception {
 		super(langDetails, dataHandler, parseHandler, args);
 	}
 
@@ -39,6 +38,11 @@ public class HQ9 extends com.VTC.langlib.Lang {
 			toReturn += currInstruct.toString();
 		}
 		return toReturn;
+	}
+
+	@Override
+	public void configureSettings() {
+		// WHAT ARE THOSE?!?
 	}
 
 }

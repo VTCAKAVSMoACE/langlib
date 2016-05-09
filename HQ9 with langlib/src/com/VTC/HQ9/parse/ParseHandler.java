@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.VTC.HQ9.structure.*;
-import com.VTC.langlib.parse.FlagOperation;
+import com.VTC.langlib.parse.Flag;
 import com.VTC.langlib.structure.Instruction;
 
 public class ParseHandler implements com.VTC.langlib.parse.ParseHandler {
@@ -24,7 +24,7 @@ public class ParseHandler implements com.VTC.langlib.parse.ParseHandler {
 	}
 
 	@Override
-	public FlagOperation getInstructionsGivenFlag(String flag) {
+	public Flag getInstructionsGivenFlag(String flag) {
 		/** Nothing to see here. */
 		return null;
 	}

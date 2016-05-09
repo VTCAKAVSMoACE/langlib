@@ -1,5 +1,14 @@
 package com.VTC.langlib.structure;
 
+/**
+ * @author vtcakavsmoace
+ *
+ */
 public interface Instruction {
-	public void execute();
+	
+	/**
+	 * 
+	 */
+	public abstract void execute();
+	
 }
