@@ -22,4 +22,14 @@ public interface LanguageDetail {
 	 */
 	public String getMisc();
 	
+	/**
+	 * 
+	 */
+	public default void reportLanguageDetails() {
+		System.out.println(getName());
+		System.out.println(getVersion());
+		System.out.println(getAuthor());
+		System.out.println(getMisc());
+	}
+	
 }

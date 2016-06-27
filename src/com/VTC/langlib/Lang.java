@@ -43,6 +43,11 @@ public abstract class Lang implements Instruction {
 	/**
 	 * 
 	 */
+	private ArrayList<String> args;
+
+	/**
+	 * 
+	 */
 	private ArrayList<? extends Instruction> instructions;
 
 	/**
@@ -58,14 +63,7 @@ public abstract class Lang implements Instruction {
 		this.setCurrentLanguageDetail(langDetails);
 		this.setCurrentDataHandler(dataHandler);
 		this.setCurrentParseHandler(parseHandler);
-
-		configureSettings();
-
-		configureArguments(args);
-
-		configureInstructions(args.remove(0));
-
-		configureInput(args);
+		this.args = args;
 	}
 
 	/**
@@ -77,27 +75,33 @@ public abstract class Lang implements Instruction {
 
 	/**
 	 * @param args
-	 * @throws InvalidSettingChangeException
 	 */
 	private void configureArguments(ArrayList<String> args) {
-		String currentFlag = null;
+		String currentFlag = "";
 		for (int currentFlagIndex = 0; currentFlagIndex < args.size(); currentFlagIndex++) {
 			currentFlag = args.get(currentFlagIndex);
-			if (parseHandler.isCommandLineInvocationFlag(currentFlag)) {
-				int parameterCount = parseHandler.getFlagParameterCount(currentFlag);
+			if (dataHandler.isCommandLineInvocationFlag(currentFlag)) {
+				int parameterCount = dataHandler.getFlagParameterCount(currentFlag);
 				String[] parameters = new String[parameterCount];
 				for (int currentParameter = 0; currentParameter < parameterCount; currentParameter++) {
 					parameters[currentParameter] = args.remove(currentFlagIndex + 1);
 				}
-				parseHandler.getInstructionsGivenFlag(args.remove(currentFlagIndex)).execute(parameters);
+				dataHandler.getInstructionGivenFlag(args.remove(currentFlagIndex)).execute(parameters);
 			}
 		}
 	}
 
-	/**
-	 * @throws InvalidSettingChangeException
-	 */
-	public abstract void configureSettings();
+	@Override
+	public void execute() {
+		configureArguments(args);
+
+		if (args.size() > 0)
+			configureInstructions(args.remove(0));
+		else
+			this.instructions = new ArrayList<Instruction>();
+
+		configureInput(args);
+	}
 
 	/**
 	 * @param filename
@@ -119,16 +123,6 @@ public abstract class Lang implements Instruction {
 	 */
 	public final void setCurrentLanguageDetail(LanguageDetail langDetails) {
 		this.langDetails = langDetails;
-	}
-
-	/**
-	 * 
-	 */
-	public final void reportLanguageDetails() {
-		System.out.println(langDetails.getName());
-		System.out.println(langDetails.getVersion());
-		System.out.println(langDetails.getAuthor());
-		System.out.println(langDetails.getMisc());
 	}
 
 	/**
@@ -163,7 +157,7 @@ public abstract class Lang implements Instruction {
 	/**
 	 * @return the instructions
 	 */
-	public final ArrayList<? extends Instruction> getCurrentInstructions() {
+	public final ArrayList<? extends Instruction> getInstructions() {
 		return instructions;
 	}
 
